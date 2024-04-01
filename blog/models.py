@@ -27,7 +27,7 @@ class Post(models.Model):
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
-    object = models.Manager() # default manager
+    objects = models.Manager() # default manager
     published = PublisedManager() # custom manager
     drafted = DraftManager()
 
