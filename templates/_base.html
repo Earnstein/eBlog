@@ -16,13 +16,20 @@
 
 </head>
 
-<body class="bg-green-50">
-    <div class="container mx-auto mt-4">
-        {% block content %}
-        {% endblock content %}
-    </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/2.3.0/flowbite.min.js"></script>
+<body class="bg-white">
+    {% comment %} LOAD NAVBAR HERE {% endcomment %}
+    {% include 'includes/navbar.html' %}
 
-</body>
+    {% comment %} LOAD CONTENT HERE {% endcomment %}
 
-</html>
+    {% block content %}
+
+    {% comment %} CONTENTS GOES HERE {% endcomment %}
+
+    {% endblock  %}
+
+
+
+    {% comment %} LOAD FOOTER HERE {% endcomment %}
+    {% include 'includes/footer.html' %}
+    
