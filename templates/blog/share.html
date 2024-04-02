@@ -1,0 +1,33 @@
+{% extends "_base.html" %}
+{% block content %}
+
+{% if sent %}
+<h1 class="text-3xl font-bold mb-4">E-mail successfully sent</h1>
+<p class="mb-4">"{{post.title}}" was successfully sent to "{{form.cleaned_data.to}}".</p>
+{% else %}
+<h1 class="text-3xl font-bold mb-4">share "{{post.title}}" by e-mail</h1>
+
+<form class="space-y-4" method="post">
+    {% csrf_token %}
+
+    <div class="flex flex-col gap-4 border-1 p-4">
+        {% for field in form %}
+        <div class="flex items-center gap-1">
+            <label for="{{ field.id_for_label }}" class="text-gray-700">{{ field.label }}</label>
+            <input
+                type="{{ field.field.widget.input_type }}"
+                id="{{ field.id_for_label }}"
+                name="{{ field.name }}"
+                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                placeholder="{{ field.label }}"
+                required
+            >
+        </div>
+    {% endfor %}
+    
+    <div class="flex justify-end">
+        <input type="submit" value="send e-mail" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    </div>
+</form>
+{% endif %}
+{% endblock  %}
