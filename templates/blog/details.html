@@ -1,16 +1,16 @@
 {% extends "_base.html" %} {% block content %}
-<section>
+<section class="bg-gray-900 text-white" style="height: calc(100vh - 70px);">
   <div class="container mx-auto">
     <div class="max-w-screen-xl mx-auto w-full space-y-4 py-10">
       <h1 class="text-4xl font-playfair text-center">  {{ post.title|capfirst }}</h1>
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mx-auto mt-4 px-4 sm:px-0"
       >
-      <article class="rounded-lg border border-gray-100 bg-white shadow-sm transition hover:shadow-lg sm:p-6">
-        <span class="inline-block rounded bg-blue-600 p-2 text-white">
+      <article  class="block space-y-3 rounded-xl border border-gray-800 p-6 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10" >
+        <span class="inline-block rounded p-2 text-pink-500">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            class="h-6 w-6"
+            class="size-10 text-pink-500"
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -35,12 +35,16 @@
           </h3>
         </a>
 
-        <p class="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">{{post.body}}</p>
+        <p class="mt-2 line-clamp-3 text-sm/relaxed text-white">{{post.body}}</p>
        
-
+        <p class="mb-2">
+          <a href="{% url "blog:post_share" post.id %}">
+          Share this post
+          </a>
+        </p>
         <a
         href="{% url 'blog:home' %}"
-        class="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-600"
+        class="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-pink-500"
       >
       Go home
 
