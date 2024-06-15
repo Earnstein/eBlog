@@ -12,12 +12,12 @@
 
     <div class="mt-8 grid grid-cols-1 gap-8 sm:grid-cols-2 md:grid-cols-3">
       {% for post in posts  %}
-      <div class="block space-y-3 rounded-xl border border-gray-800 p-6 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10" 
+      <div class="block space-y-3 rounded-xl border border-gray-800 p-6 shadow-xl transition hover:border-blue-500/10 hover:shadow-blue-500/10" 
       
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          class="size-10 text-pink-500"
+          class="size-10 text-blue-500"
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -38,11 +38,11 @@
           {{ post.title|capfirst }}
         </h2>
 
-        <p class="mt-2 line-clamp-3 text-sm/relaxed text-gray-500">
+        <p class="mt-2 line-clamp-3 text-sm/relaxed text-gray-300">
           Published {{post.publish|date:"N d, Y "}} by {{post.author|capfirst}}
         </p>
 
-      <a href="{{post.get_absolute_url}}" class="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-pink-500">
+      <a href="{{post.get_absolute_url}}" class="group mt-4 inline-flex items-center gap-1 text-sm font-medium text-blue-500">
         Find out more
     
         <span aria-hidden="true" class="block transition-all group-hover:ms-0.5 rtl:rotate-180">
