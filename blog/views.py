@@ -1,42 +1,45 @@
+from django.shortcuts import render, get_object_or_404
 from .models import Post
-from django.views.generic import ListView, DetailView, View
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from .forms import EmailPostForm
-from django.shortcuts import get_object_or_404, render, redirect
 from django.core.mail import send_mail
 
-class HomeView(ListView):
-    model = Post
-    queryset = Post.objects.all().order_by("-publish")
-    template_name = "home.html"
-    context_object_name = "posts"
-    paginate_by = 6
+
+def home(request):
+    posts = Post.published.all()
+    paginator = Paginator(posts, 3)
+    page_number = request.GET.get('page', 1)
+    try:
+        posts = paginator.page(page_number)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    context = {
+        'posts': posts
+    }
+    return render(request, 'home.html', context)
 
 
-class PostDetailView(DetailView):
-    model = Post
-    queryset = Post.objects.all()
-    template_name = "blog/details.html"
-    context_object_name = "post"
-    slug_field = "slug"
-    slug_url_kwarg = "post"
-    date_field = "publish"
-    year_field = "year"
-    month_field = "month"
-    day_field = "day"
+def post_detail_view(request, year, month, day, post):
+    post = get_object_or_404(
+        Post,
+        status=Post.Status.PUBLISHED,
+        slug=post,
+        publish__year=year,
+        publish__month=month,
+        publish__day=day,
+    )
+    context = {'post': post}
+    return render(request, 'blog/details.html', context)
 
-class PostShareView(View):
-    template_name = "blog/share.html"
-    form_class = EmailPostForm
 
-    def get(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
-        form = self.form_class()
-        context = {'post': post, 'form': form}
-        return render(request, self.template_name, context)
+def post_share(request, post_id):
 
-    def post(self, request, post_id):
-        post = get_object_or_404(Post, id=post_id)
-        form = self.form_class(request.POST)
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    sent = False
+    if request.method == "POST":
+        form = EmailPostForm(request.POST)
         if form.is_valid():
             cd = form.cleaned_data
             post_url = request.build_absolute_uri(post.get_absolute_url())
@@ -45,5 +48,7 @@ class PostShareView(View):
                       f"{cd['name']}\'s comments: {cd['comments']}"
             send_mail(subject, message, 'bdamilola00@gmail.com', [cd['to']])
             sent = True
-        context = {'post': post, 'form': form, 'sent': sent}
-        return render(request, self.template_name, context)
+    else:
+        form = EmailPostForm()
+    context = {"post": post, "form": form, "sent": sent}
+    return render(request, "blog/share.html", context)
