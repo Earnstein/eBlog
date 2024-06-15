@@ -1,8 +1,9 @@
-from django.shortcuts import render, get_object_or_404
-from .models import Post
+from django.shortcuts import render, get_object_or_404, redirect
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from .forms import EmailPostForm
 from django.core.mail import send_mail
+from django.views.decorators.http import require_POST
+from .models import Post
+from .forms import EmailPostForm, CommentForm
 
 
 def home(request):
@@ -15,9 +16,7 @@ def home(request):
         posts = paginator.page(paginator.num_pages)
     except PageNotAnInteger:
         posts = paginator.page(1)
-    context = {
-        'posts': posts
-    }
+    context = {'posts': posts}
     return render(request, 'home.html', context)
 
 
@@ -30,12 +29,13 @@ def post_detail_view(request, year, month, day, post):
         publish__month=month,
         publish__day=day,
     )
-    context = {'post': post}
+    commments = post.comments.filter(active=True)
+    form = CommentForm()
+    context = {"comments": commments, "form": form, "post": post}
     return render(request, 'blog/details.html', context)
 
 
 def post_share(request, post_id):
-
     post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
     sent = False
     if request.method == "POST":
@@ -52,3 +52,15 @@ def post_share(request, post_id):
         form = EmailPostForm()
     context = {"post": post, "form": form, "sent": sent}
     return render(request, "blog/share.html", context)
+
+
+@require_POST
+def post_comment(request, post_id):
+    post = get_object_or_404(Post, id=post_id, status=Post.Status.PUBLISHED)
+    form = CommentForm(request.POST)
+    if form.is_valid():
+        comment = form.save(commit=False)
+        comment.post = post
+        comment.save()
+    context = {"post": post, "form": form, "comment": comment}
+    return render(request, "blog/comment.html", context)
