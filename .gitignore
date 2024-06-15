@@ -263,3 +263,4 @@ dist
 
 static/CACHE
 bun.lockb
+.vscode
