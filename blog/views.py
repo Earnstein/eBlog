@@ -6,25 +6,26 @@ from django.core.mail import send_mail
 
 class HomeView(ListView):
     model = Post
-    queryset = Post.objects.all().order_by('-publish')
-    template_name = 'home.html'
-    context_object_name = 'posts'
+    queryset = Post.objects.all().order_by("-publish")
+    template_name = "home.html"
+    context_object_name = "posts"
     paginate_by = 6
 
 
 class PostDetailView(DetailView):
     model = Post
     queryset = Post.objects.all()
-    template_name = 'blog/details.html'
-    context_object_name = 'post'
-    slug_field = 'slug'
-    slug_url_kwarg = 'post'
-    date_field = 'publish'
-    year_field = 'year'
-    month_field = 'month'
-    day_field = 'day'
+    template_name = "blog/details.html"
+    context_object_name = "post"
+    slug_field = "slug"
+    slug_url_kwarg = "post"
+    date_field = "publish"
+    year_field = "year"
+    month_field = "month"
+    day_field = "day"
+
 class PostShareView(View):
-    template_name = 'blog/share.html'
+    template_name = "blog/share.html"
     form_class = EmailPostForm
 
     def get(self, request, post_id):
