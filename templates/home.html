@@ -1,6 +1,6 @@
 {% extends "_base.html" %} 
 {% block content %}
-<section class="bg-gray-900 text-white">
+<section class="text-white">
   <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
     <div class="mx-auto max-w-lg text-center">
       <h2 class="text-3xl font-bold sm:text-4xl font-playfair text-shadow">Welcome to eBlog</h2>
@@ -55,7 +55,7 @@
       {% endfor %}
     </div>
     <div class="grid place-content-center">
-      {% include "includes/pagination.html" with page=page_obj%}
+      {% include "includes/pagination.html" with page=posts%}
     </div>
 </section>
 {% endblock content %}
