@@ -1,33 +1,56 @@
-{% extends "_base.html" %}
+{% extends "_base.html" %} 
 {% block content %}
 
-{% if sent %}
-<h1 class="text-3xl font-bold mb-4">E-mail successfully sent</h1>
-<p class="mb-4">"{{post.title}}" was successfully sent to "{{form.cleaned_data.to}}".</p>
-{% else %}
-<h1 class="text-3xl font-bold mb-4">share "{{post.title}}" by e-mail</h1>
+<div class="mx-auto container px-4 py-16 sm:px-6 lg:px-8">
+  <div class="mx-auto max-w-lg">
+    {% if sent %}
+    <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">
+      E-mail successfully sent
+    </h1>
 
-<form class="space-y-4" method="post">
-    {% csrf_token %}
+    <p class="mx-auto mt-4 max-w-md text-center text-gray-500">
+      "{{post.title}}" was successfully sent to "{{form.cleaned_data.to}}".
+    </p>
 
-    <div class="flex flex-col gap-4 border-1 p-4">
-        {% for field in form %}
-        <div class="flex items-center gap-1">
-            <label for="{{ field.id_for_label }}" class="text-gray-700">{{ field.label }}</label>
-            <input
-                type="{{ field.field.widget.input_type }}"
-                id="{{ field.id_for_label }}"
-                name="{{ field.name }}"
-                class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                placeholder="{{ field.label }}"
-                required
-            >
+    {% else %}
+    <h1 class="text-center text-2xl font-bold text-white sm:text-3xl font-playfair">
+      Share <blockquote class="inline-block italic font-semibold">"{{post.title}}"</blockquote> by e-mail
+    </h1>
+    <form
+      method="post"
+      class="mb-0 mt-4 space-y-4 rounded-lg p-4 p-6 shadow-xl transition hover:border-pink-500/10 hover:shadow-pink-500/10 sm:p-6 lg:p-8"
+    >      
+      {% csrf_token %}
+       {% for field in form %}
+      <div>
+        <label for={{ field.label }} class="sr-only">{{ field.label }}</label>
+
+        <div class="relative">
+          <input
+            type="{{ field.field.widget.input_type }}"
+            id="{{ field.id_for_label }}"
+            name="{{ field.name }}"
+            class="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm font-inter"
+            placeholder="{{ field.name | capfirst}}"
+            required
+          />
         </div>
-    {% endfor %}
-    
-    <div class="flex justify-end">
-        <input type="submit" value="send e-mail" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-    </div>
-</form>
-{% endif %}
-{% endblock  %}
+      </div>
+      {% endfor %}
+      <button
+        type="submit"
+        value="send e-mail"
+        class="block w-full rounded-lg bg-indigo-600 px-5 py-3 text-sm font-medium text-white"
+      >
+        Send Email
+      </button>
+
+      <p class="text-center text-sm text-gray-400">
+        More blogs?
+        <a class="underline text-white" href={% url "blog:home" %}>Check here</a>
+      </p>
+    </form>
+    {% endif %}
+  </div>
+</div>
+{% endblock content %}
