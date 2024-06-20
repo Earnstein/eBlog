@@ -1,13 +1,17 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
 from .models import Post
 from .forms import EmailPostForm, CommentForm
+from taggit.models import Tag
 
-
-def home(request):
+def home(request, tag_slug=None):
     posts = Post.published.all()
+    tag = None
+    if tag_slug:
+        tag = get_object_or_404(Tag, slug=tag_slug)
+        posts = posts.filter(tags__in=[tag])
     paginator = Paginator(posts, 3)
     page_number = request.GET.get('page', 1)
     try:
@@ -16,7 +20,7 @@ def home(request):
         posts = paginator.page(paginator.num_pages)
     except PageNotAnInteger:
         posts = paginator.page(1)
-    context = {'posts': posts}
+    context = {'posts': posts, 'tag': tag}
     return render(request, 'home.html', context)
 
 
