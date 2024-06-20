@@ -7,12 +7,7 @@
         <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl">
           Your comment has been added successfully.
         </h1>
-        <p><a href="{{post.get_absolute_url}}"> Back to post</a></p>
-        {% else %}
-
-      <h1 class="text-center text-2xl font-bold text-indigo-600 sm:text-3xl"> Add a new comment</h1>
-  
-     {% include "blog/includes/comment_form.html" %}
+        <button class="bg-blue-500 hover:bg-blue-600 text-white rounded-xl px-4 py-2"><a href="{{post.get_absolute_url}}"> Back to post</a></button>
       {% endif %}
     </div>
   </div>
