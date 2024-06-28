@@ -53,7 +53,9 @@
               </span>
             </a>
 
-            <button class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2">
+            <button
+              class="bg-blue-500 hover:bg-blue-600 text-white rounded-md px-4 py-2"
+            >
               <a
                 class="text-sm font-medium"
                 href="{% url 'blog:post_share' post.id %}"
@@ -69,22 +71,45 @@
 
         <div>{% include "blog/includes/comment_form.html" %}</div>
       </div>
-      {% comment %} COMMENT {% endcomment %}
-      <div  class="mt-2 border border-gray-800 shadow-xl max-w-sm mx-auto sm:mx-0 overflow-y-auto p-2 rounded-md"
-      style="height: 150px; width: 400px;">
-        {% for comment in comments %}
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mx-auto mt-4 px-4 sm:px-0">
+        {% comment %} COMMENT {% endcomment %}
         <div
-          class="mt-2 border border-gray-800 shadow-xl max-w-sm mx-auto sm:mx-0 p-2 rounded-md hover:bg-gray-800"
+          class="mt-2 border border-gray-800 shadow-xl max-w-sm mx-auto sm:mx-0 overflow-y-auto p-2 rounded-md"
+          style="height: 150px; width: 400px"
         >
-          <div class="flex items-center gap-x-2">
-            <p class="text-white">{{ comment.name }}:</p>
-            <span class="italic"> {{comment.body|linebreaks}} </span>
+          {% for comment in comments %}
+          <div class="mt-2 border border-gray-800 shadow-xl max-w-sm mx-auto sm:mx-0 p-2 rounded-md hover:bg-gray-800">
+            <div class="flex items-center gap-x-2">
+              <p class="text-white">{{ comment.name }}:</p>
+              <span class="italic"> {{comment.body|linebreaks}} </span>
+            </div>
+            <span class="text-xs text-gray-300"> {{comment.created}} </span>
           </div>
-          <span class="text-xs text-gray-300"> {{comment.created}} </span>
+          {% empty %}
+          <p>There are no comments.</p>
+          {% endfor %}
         </div>
-        {% empty %}
-        <p>There are no comments.</p>
-        {% endfor %}
+
+        <div>
+          <h2 class="text-sm font-bold text-white sm:text-xl">Similar Posts</h2>
+          {% for post in similar_posts %}
+          <div>
+            <a
+              href="{{post.get_absolute_url}}"
+              class="mt-4 text-xs font-bold text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis transition-all hover:text-blue-500"
+            >
+              {{ post.title }}
+            </a>
+            {% empty %}
+            <p
+              class="mt-1 font-bold text-gray-300 whitespace-nowrap overflow-hidden text-ellipsis text-sm"
+            >
+              No similar posts found
+            </p>
+          </div>
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
