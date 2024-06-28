@@ -2,9 +2,11 @@ from django.shortcuts import render, get_object_or_404
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.core.mail import send_mail
 from django.views.decorators.http import require_POST
+from django.db.models import Count
 from .models import Post
 from .forms import EmailPostForm, CommentForm
 from taggit.models import Tag
+
 
 def home(request, tag_slug=None):
     posts = Post.published.all()
@@ -35,7 +37,17 @@ def post_detail_view(request, year, month, day, post):
     )
     commments = post.comments.filter(active=True)
     form = CommentForm()
-    context = {"comments": commments, "form": form, "post": post}
+    # List of similar posts
+    post_tags_ids = post.tags.values_list('id', flat=True)
+    print(post_tags_ids)
+    similar_posts = Post.published.filter(tags__in=post_tags_ids).exclude(id=post.id)
+    similar_posts = similar_posts.annotate(same_tags=Count('tags')).order_by('-same_tags', '-publish')[:4]
+    context = {
+        "comments": commments,
+        "form": form,
+        "post": post,
+        "similar_posts": similar_posts
+    }
     return render(request, 'blog/details.html', context)
 
 
@@ -66,5 +78,5 @@ def post_comment(request, post_id):
         comment = form.save(commit=False)
         comment.post = post
         comment.save()
-    context = {"post": post, "form": form, "comment": comment}
+    context = {"post": post, "comment": comment}
     return render(request, "blog/comment.html", context)
