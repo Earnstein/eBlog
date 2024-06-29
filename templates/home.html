@@ -1,5 +1,6 @@
 {% extends "_base.html" %} 
 {% block content %}
+{% load blog_tags %}
 <section>
   <div class="mx-auto max-w-screen-xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8 lg:py-16">
     <div class="mx-auto max-w-lg text-center">
@@ -10,7 +11,7 @@
       </h2>
 
       <p class="mt-4 font-poppins text-gray-300">
-        Explore my tech blog for valuable insights and inspiration. Share my
+        Explore my tech blog for valuable insights and inspiration. with over {% total_posts %} posts written so far, Share my
         thoughts on the latest tech trends and programming experiences.
       </p>
     </div>
