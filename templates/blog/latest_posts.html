@@ -1,0 +1,7 @@
+<ul class="space-y-1">
+    {% for post in latest_posts %}
+    <li class="text-xs text-gray-300 hover:text-blue-500 hover:underline hover:underline-offset-2 transition duration-250 ms-4">
+        <a href="{{ post.get_absolute_url }}">{{post.title | capfirst}}</a>
+    </li>
+    {% endfor %}
+</ul>
