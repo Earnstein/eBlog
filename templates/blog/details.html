@@ -1,5 +1,6 @@
 {% extends "_base.html" %}
 {% block content %}
+{% load blog_tags %}
 <section class="bg-gray-900 text-white" style="height: calc(100vh - 70px)">
   <div class="max-w-screen-xl mx-auto">
     <div class="max-w-screen-xl mx-auto w-full space-y-4 py-10">
@@ -36,8 +37,8 @@
             {{post.author|capfirst}}
           </h3>
 
-          <p class="mt-2 line-clamp-3 text-sm/relaxed text-gray-300">
-            {{post.body| linebreaks}}
+          <p class="mt-2 line-clamp-3 text-xs text-gray-300">
+            {{post.body|markdown|linebreaks}}
           </p>
           <div class="flex justify-between items-center">
             <a
